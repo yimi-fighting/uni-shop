@@ -1,5 +1,9 @@
 <template>
   <view>
+    <view class="home-search">
+      <!-- 顶部搜索框 -->
+      <my-search></my-search>
+    </view>
     <!-- 首页的轮播图 -->
     <swiper :indicator-dots="true" :autoplay="true" :interval="3000" :duration="1000" :circular="true">
       <!-- 循环渲染轮播图的 item 项 -->
@@ -21,19 +25,20 @@
     <view class="floor-list">
       <view class="floor-item" v-for="(item,index) in floorList" :key="index">
         <image :src="item.floor_title.image_src" mode="" class="title-image"></image>
-       <view class="box">
-         <!-- 左侧盒子 -->
-         <navigator class="box-left" :url="item.product_list[0].url">
-           <image :src="item.product_list[0].image_src" :style="{width: item.product_list[0].image_width + 'rpx'}"
-             mode="widthFix"></image>
-         </navigator>
-         <!-- 右侧盒子 -->
-         <view class="box-right">
-           <navigator class="right-image" v-for="(item2,index2) in item.product_list" :key="index2" v-if="index2!==0" :url="item2.url">
-             <image :src="item2.image_src" mode="widthFix" :style="{width: item2.image_width + 'rpx'}"></image>
-           </navigator>
-         </view>
-       </view>
+        <view class="box">
+          <!-- 左侧盒子 -->
+          <navigator class="box-left" :url="item.product_list[0].url">
+            <image :src="item.product_list[0].image_src" :style="{width: item.product_list[0].image_width + 'rpx'}"
+              mode="widthFix"></image>
+          </navigator>
+          <!-- 右侧盒子 -->
+          <view class="box-right">
+            <navigator class="right-image" v-for="(item2,index2) in item.product_list" :key="index2" v-if="index2!==0"
+              :url="item2.url">
+              <image :src="item2.image_src" mode="widthFix" :style="{width: item2.image_width + 'rpx'}"></image>
+            </navigator>
+          </view>
+        </view>
       </view>
     </view>
   </view>
@@ -99,9 +104,9 @@
         } = await uni.$http.get('/api/public/v1/home/floordata')
         if (res.meta.status != 200) uni.$showMsg()
         // 对message中的url进行修改，修改为自定义的url
-        res.message.forEach(floorList=>{
-          floorList.product_list.forEach(item=>{
-            item.url='/subpkg/goods_list/goods_list?'+item.navigator_url.split('?')[1]
+        res.message.forEach(floorList => {
+          floorList.product_list.forEach(item => {
+            item.url = '/subpkg/goods_list/goods_list?' + item.navigator_url.split('?')[1]
           })
         })
         this.floorList = res.message
@@ -111,6 +116,15 @@
 </script>
 
 <style lang="scss">
+  // 顶部搜索框
+  .home-search{
+    // 开启粘滞定位
+    position: sticky;
+    // 吸顶的位置
+    top: 0;
+    // 提高层级
+    z-index: 999;
+  }
   // 轮播图
   swiper {
 
@@ -144,9 +158,11 @@
         height: 60rpx;
         width: 100%;
       }
-      .box{
+
+      .box {
         display: flex;
-        .box-right{
+
+        .box-right {
           display: flex;
           flex-wrap: wrap;
           justify-content: space-around;
