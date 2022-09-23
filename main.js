@@ -23,6 +23,15 @@ $http.afterRequest=function(options){
   uni.hideLoading()
 }
 
+// 创建一个全局的showMsg,当数据请求失败时调用
+uni.$showMsg=function(title="数据请求失败",duration=1500){
+  uni.showToast({
+    title,
+    duration,
+    icon:'none'
+  })
+}
+
 Vue.config.productionTip = false
 
 App.mpType = 'app'
