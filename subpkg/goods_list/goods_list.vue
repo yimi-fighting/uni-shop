@@ -57,7 +57,7 @@
       this.pagenum=1
       this.total=0
       this.goodsList=[]
-      this.loading=flase
+      this.loading=false
       // 发送请求
       this.getGoodsList(()=>{uni.stopPullDownRefresh()})
     },
