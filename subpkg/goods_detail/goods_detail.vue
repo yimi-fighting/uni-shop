@@ -45,7 +45,20 @@
 </template>
 
 <script>
+  // 从 vuex 中按需导出 mapState 辅助方法
+  import {
+    mapState,
+    mapMutations,
+    mapGetters
+  } from 'vuex'
   export default {
+    computed: {
+      // 调用 mapState 方法，把 m_cart 模块中的 cart 数组映射到当前页面中，作为计算属性来使用
+      // ...mapState('模块的名称', ['要映射的数据名称1', '要映射的数据名称2'])
+      // ...mapState('m_cart',[])
+      // ...mapGetters计算属性
+      ...mapGetters('m_cart', ['total'])
+    },
     data() {
       return {
         // 商品的详细信息
@@ -58,7 +71,7 @@
         }, {
           icon: 'cart',
           text: '购物车',
-          info: 2
+          info: 0
         }],
         buttonGroup: [{
             text: '加入购物车',
@@ -80,6 +93,9 @@
       this.getGoodsInfo(goods_id)
     },
     methods: {
+      // 把 m_cart 模块中的 addToCart 方法映射到当前页面使用
+      ...mapMutations('m_cart', ['addToCart']),
+      // 获取商品的信息
       async getGoodsInfo(goods_id) {
         const {
           data: res
@@ -92,21 +108,56 @@
           .replace(/webp/g, 'jpg')
         this.goods_info = res.message
       },
+      // 调用previewImage方法预览图片
       preview(i) {
-        // 调用previewImage方法预览图片
         uni.previewImage({
           current: i,
           urls: this.goods_info.pics.map(x => x.pics_big)
         })
       },
-      onClick(e){
+      // 点击商品导航栏的左边按钮
+      onClick(e) {
         // 点击购物车跳转页面
-        if(e.content.text==='购物车'){
+        if (e.content.text === '购物车') {
           console.log(111);
           uni.switchTab({
-            url:'/pages/cart/cart'
+            url: '/pages/cart/cart'
           })
         }
+      },
+      // 点击商品导航栏的右边按钮
+      buttonClick(e) {
+        //点击了加入购物车按钮
+        if (e.content.text === '加入购物车') {
+          // 2. 组织一个商品的信息对象
+          const goods = {
+            goods_id: this.goods_info.goods_id, // 商品的Id
+            goods_name: this.goods_info.goods_name, // 商品的名称
+            goods_price: this.goods_info.goods_price, // 商品的价格
+            goods_count: 1, // 商品的数量
+            goods_small_logo: this.goods_info.goods_small_logo, // 商品的图片
+            goods_state: true // 商品的勾选状态
+          }
+
+          // 3. 通过 this 调用映射过来的 addToCart 方法，把商品信息对象存储到购物车中
+          this.addToCart(goods)
+        }
+      }
+    },
+    // 监听事件
+    watch: {
+      // 监听total的数据的改变
+      total: {
+        handler(newVal) {
+          // 修改购物车的徽标
+          // 遍历data中的options属性，将其中购物车的info改为指定数值
+          var findReault = this.options.find(x => x.text === '购物车')
+          if (findReault) {
+            findReault.info = newVal
+          }
+        },
+        // 页面初次加载完毕后立即调用
+        immediate:true
       }
     }
   }
