@@ -10,7 +10,6 @@ export default {
   onShow() {
     // 在页面刚展示的时候显示徽标
     this.setBadge()
-    console.log(this.total);
   },
   methods: {
     setBadge() {
@@ -19,6 +18,11 @@ export default {
         index: 2,
         text: this.total + '', // 注意：text 的值必须是字符串，不能是数字
       })
+    }
+  },
+  watch:{
+    total(newVal){
+      this.setBadge()
     }
   }
 }

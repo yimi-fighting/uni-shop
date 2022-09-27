@@ -30,6 +30,28 @@ export default {
     // 持久化存储
     saveToStorge(state) {
       uni.setStorageSync('cart', JSON.stringify(state.cart))
+    },
+    // 修改购物车中商品的勾选状态
+    updateGoodsState(state,goods){
+      let findGoods=state.cart.find(x => x.goods_id === goods.goods_id)
+      if(findGoods){
+        findGoods.goods_state=goods.goods_state
+        // 持久化存储
+        this.commit('m_cart/saveToStorge')
+      }
+    },
+    // 修改cart中数据的goods——count属性
+    updateGoodsCount(state,goods){
+      let findGoods=state.cart.find(x=>x.goods_id===goods.goods_id)
+      if(findGoods){
+        findGoods.goods_count=goods.goods_count
+        this.commit('m_cart/saveToStorge')
+      }
+    },
+    // 删除cart中的数据
+    deleteGoods(state,goods){
+      state.cart=state.cart.filter(x=>x.goods_id!==goods.goods_id)
+      this.commit('m_cart/saveToStorge')
     }
   },
 
