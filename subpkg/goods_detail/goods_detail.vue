@@ -57,7 +57,7 @@
       // ...mapState('模块的名称', ['要映射的数据名称1', '要映射的数据名称2'])
       // ...mapState('m_cart',[])
       // ...mapGetters计算属性
-      ...mapGetters('m_cart', ['total'])
+      ...mapGetters('m_cart', ['total','checkedCount'])
     },
     data() {
       return {
@@ -147,7 +147,7 @@
     // 监听事件
     watch: {
       // 监听total的数据的改变
-      total: {
+      checkedCount: {
         handler(newVal) {
           // 修改购物车的徽标
           // 遍历data中的options属性，将其中购物车的info改为指定数值

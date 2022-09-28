@@ -32,25 +32,31 @@ export default {
       uni.setStorageSync('cart', JSON.stringify(state.cart))
     },
     // 修改购物车中商品的勾选状态
-    updateGoodsState(state,goods){
-      let findGoods=state.cart.find(x => x.goods_id === goods.goods_id)
-      if(findGoods){
-        findGoods.goods_state=goods.goods_state
+    updateGoodsState(state, goods) {
+      let findGoods = state.cart.find(x => x.goods_id === goods.goods_id)
+      if (findGoods) {
+        findGoods.goods_state = goods.goods_state
         // 持久化存储
         this.commit('m_cart/saveToStorge')
       }
     },
     // 修改cart中数据的goods——count属性
-    updateGoodsCount(state,goods){
-      let findGoods=state.cart.find(x=>x.goods_id===goods.goods_id)
-      if(findGoods){
-        findGoods.goods_count=goods.goods_count
+    updateGoodsCount(state, goods) {
+      let findGoods = state.cart.find(x => x.goods_id === goods.goods_id)
+      if (findGoods) {
+        findGoods.goods_count = goods.goods_count
         this.commit('m_cart/saveToStorge')
       }
     },
     // 删除cart中的数据
-    deleteGoods(state,goods){
-      state.cart=state.cart.filter(x=>x.goods_id!==goods.goods_id)
+    deleteGoods(state, goods) {
+      state.cart = state.cart.filter(x => x.goods_id !== goods.goods_id)
+      this.commit('m_cart/saveToStorge')
+    },
+    // 实现商品的全选和反选功能
+    updateAllGoodsState(state,newState){
+      state.cart.forEach(x=>x.goods_state=newState)
+      // 持久化存储到本地
       this.commit('m_cart/saveToStorge')
     }
   },
@@ -63,6 +69,15 @@ export default {
       // 循环统计商品的数量，累加到变量 c 中
       state.cart.forEach(goods => c += goods.goods_count)
       return c
+    },
+    // 计算商品的总数
+    checkedCount(state) {
+      // 通过filter过滤所有选中的商品
+      return state.cart.filter(x => x.goods_state).reduce((total, item) => total += item.goods_count, 0)
+    },
+    // 计算选中商品的总价格
+    checkedPrice(state){
+      return state.cart.filter(x=>x.goods_state).reduce((total,item)=>total+=item.goods_price,0)
     }
   },
 
