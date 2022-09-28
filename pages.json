@@ -2,25 +2,21 @@
   "pages": [{
     "path": "pages/home/home",
     "style": {
-      "navigationBarTitleText": "",
       "enablePullDownRefresh": false
     }
   }, {
     "path": "pages/cart/cart",
     "style": {
-      "navigationBarTitleText": "",
       "enablePullDownRefresh": false
     }
   }, {
     "path": "pages/cate/cate",
     "style": {
-      "navigationBarTitleText": "",
       "enablePullDownRefresh": false
     }
   }, {
     "path": "pages/my/my",
     "style": {
-      "navigationBarTitleText": "",
       "enablePullDownRefresh": false
     }
   }],
@@ -36,11 +32,11 @@
     }, {
       "path": "goods_list/goods_list",
       "style": {
-        "navigationBarTitleText": "",
+        "navigationBarTitleText": "黑马优选",
         "enablePullDownRefresh": true,
         "onReachBottomDistance": 150,
         "backgroundColor": "#F8F8F8"
-        
+
       }
 
     }, {
